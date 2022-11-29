@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-LABEL maintainer="ysde108@gmail.com"
+LABEL maintainer="varun.rajasekaran85@gmail.com"
 
 ENV RESTORE false
 ENV ARCHIVE_FILE ""

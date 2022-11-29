@@ -10,16 +10,12 @@ metadata:
   name: grafana-backup-tool
   namespace: grafana-backup-tool
 data:
-  GRAFANA_URL: "http://grafana.grafana.svc.cluster.local:80"
-  GRAFANA_TOKEN: "{YOUR_GRAFANA_TOKEN}"
-  GRAFANA_ADMIN_ACCOUNT: "backup"
-  GRAFANA_ADMIN_PASSWORD: "{YOUR_GRAFANA_ADMIN_PASSWORD}"
-  AWS_ENDPOINT_URL: "http://gitlab-minio-svc.gitlab.svc.cluster.local:9000"
-  AWS_S3_BUCKET_NAME: "grafana-backup"
-  AWS_S3_BUCKET_KEY: "daily"
-  AWS_DEFAULT_REGION: "us-east-1"
-  AWS_ACCESS_KEY_ID: "{YOUR_AWS_ACCESS_KEY_ID}"
-  AWS_SECRET_ACCESS_KEY: "{YOUR_AWS_SECRET_ACCESS_KEY}"
+  GRAFANA_URL: "http://35.184.40.61:3000"
+  GRAFANA_TOKEN: "eyJrIjoiY1hoSU1MdG1DcUIzenJ5WE82bXhJUEVYMUp6OEZ0bWUiLCJuIjoiYmFja3VwIiwiaWQiOjF9"
+  GRAFANA_ADMIN_ACCOUNT: "admin"
+  GRAFANA_ADMIN_PASSWORD: "admin"
+  GCS_BUCKET_NAME: "varun-grafanabackup"
+  GOOGLE_APPLICATION_CREDENTIALS: "/etc/config/google-storage-creds.json"
 ---
 # Run grafana-backup-tool daily and store backups in an S3
 # compatible object storage such as minio
@@ -31,7 +27,7 @@ metadata:
   labels:
     app: grafana-backup-tool
 spec:
-  schedule: "0 4 * * *"
+  schedule: "* * * * *"
   jobTemplate:
     metadata:
       labels:
@@ -42,8 +38,15 @@ spec:
           restartPolicy: "Never"
           containers:
             - name: grafana-backup-tool
-              image: "ysde/docker-grafana-backup-tool:1.2.4"
+              image: "mydock21/grafana-backup-tool:1.0.0"
               imagePullPolicy: Always
               envFrom:
                 - configMapRef:
                     name: grafana-backup-tool
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /etc/config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: google-storage-creds
