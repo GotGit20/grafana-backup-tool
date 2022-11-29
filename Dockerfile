@@ -2,7 +2,7 @@ FROM alpine:latest
 
 LABEL maintainer="varun.rajasekaran85@gmail.com"
 
-ENV kubect false
+ENV RESTORE false
 ENV ARCHIVE_FILE ""
 
 RUN echo "@edge http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \

@@ -14,6 +14,7 @@ data:
   GRAFANA_TOKEN: "eyJrIjoiY1hoSU1MdG1DcUIzenJ5WE82bXhJUEVYMUp6OEZ0bWUiLCJuIjoiYmFja3VwIiwiaWQiOjF9"
   GRAFANA_ADMIN_ACCOUNT: "admin"
   GRAFANA_ADMIN_PASSWORD: "admin"
+  RESTORE: true
   ARCHIVE_FILE: "202211290029.tar.gz"
   GCS_BUCKET_NAME: "varun-grafanabackup"
   GOOGLE_APPLICATION_CREDENTIALS: "/etc/config/google-storage-creds.json"
