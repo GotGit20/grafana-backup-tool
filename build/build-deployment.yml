@@ -8,7 +8,7 @@ spec:
   - name: kaniko-build
     image: gcr.io/kaniko-project/executor:latest
     args: ["--context=git://github.com/GotGit20/grafana-backup-tool.git",
-           "--destination=mydock21/grafana-backup-tool:1.0.0",
+           "--destination=mydock21/grafana-backup-tool:backup",
            "--dockerfile=Dockerfile"]
     volumeMounts:
       - name: kaniko-secret

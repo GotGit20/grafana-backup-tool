@@ -40,8 +40,8 @@ spec:
           restartPolicy: "Never"
           containers:
             - name: grafana-backup-tool
-              image: "mydock21/grafana-backup-tool:1.0.0"
-              imagePullPolicy: Always
+              image: "mydock21/grafana-backup-tool:backup"
+              imagePullPolicy: IfNotPresent
               envFrom:
                 - configMapRef:
                     name: grafana-backup-tool

@@ -27,4 +27,4 @@ def main(settings):
         print("[Pre-Check] Server status is NOT OK !!: {0}".format(json_resp))
     print_horizontal_line()
 
-    return (status, json_resp, dashboard_uid_support, datasource_uid_support, paging_support)
+    return (status, json_resp)
