@@ -1,8 +1,5 @@
 from grafana_backup.constants import (PKG_NAME, PKG_VERSION, JSON_CONFIG_PATH)
 from grafana_backup.save import main as save
-from grafana_backup.restore import main as restore
-from grafana_backup.delete import main as delete
-from grafana_backup.tools import main as tools
 from grafana_backup.grafanaSettings import main as conf
 from docopt import docopt
 import os
@@ -50,15 +47,6 @@ def main():
 
     if args.get('save', None):
         save(args, settings)
-        sys.exit()
-    elif args.get('restore', None):
-        restore(args, settings)
-        sys.exit()
-    elif args.get('delete', None):
-        delete(args, settings)
-        sys.exit()
-    elif args.get('tools', None):
-        tools(args, settings)
         sys.exit()
     elif args.get('--help', None):
         print(docstring)

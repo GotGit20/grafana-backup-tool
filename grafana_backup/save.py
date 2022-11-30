@@ -7,11 +7,8 @@ from grafana_backup.save_snapshots import main as save_snapshots
 from grafana_backup.save_versions import main as save_versions
 from grafana_backup.save_annotations import main as save_annotations
 from grafana_backup.archive import main as archive
-from grafana_backup.s3_upload import main as s3_upload
-from grafana_backup.influx import main as influx
 from grafana_backup.save_orgs import main as save_orgs
 from grafana_backup.save_users import main as save_users
-from grafana_backup.azure_storage_upload import main as azure_storage_upload
 from grafana_backup.gcs_upload import main as gcs_upload
 import sys
 
@@ -52,25 +49,11 @@ def main(args, settings):
         for backup_function in backup_functions.keys():
             backup_functions[backup_function](args, settings)
 
-    aws_s3_bucket_name = settings.get('AWS_S3_BUCKET_NAME')
-    azure_storage_container_name = settings.get('AZURE_STORAGE_CONTAINER_NAME')
     gcs_bucket_name = settings.get('GCS_BUCKET_NAME')
-    influxdb_host = settings.get('INFLUXDB_HOST')
 
     if not arg_no_archive:
         archive(args, settings)
 
-    if aws_s3_bucket_name:
-        print('Upload archives to S3:')
-        s3_upload(args, settings)
-
-    if azure_storage_container_name:
-        print('Upload archives to Azure Storage:')
-        azure_storage_upload(args, settings)
-
     if gcs_bucket_name:
         print('Upload archives to GCS:')
         gcs_upload(args, settings)
-
-    if influxdb_host:
-        influx(args, settings)

@@ -18,4 +18,4 @@ RUN pip3 --no-cache-dir install .
 
 RUN chown -R 1337:1337 /opt/grafana-backup-tool
 USER 1337
-CMD sh -c 'grafana-backup restore $ARCHIVE_FILE'
+CMD sh -c 'grafana-backup save'
