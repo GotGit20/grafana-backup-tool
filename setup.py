@@ -7,10 +7,9 @@ version = PKG_VERSION
 requires = [
     'requests',
     'docopt',
-    'boto3',
-    'azure-storage-blob',
     'google-cloud-storage',
-    'influxdb'
+    'logging'
+    'ecs-logging'
 ]
 
 setup(
@@ -21,7 +20,7 @@ setup(
     long_description=open('README.md', 'r').read(),
     author="author",
     author_email="ysde108@gmail.com",
-    url="https://github.com/ysde/grafana-backup-tool",
+    url="https://github.com/GotGit20/grafana-backup-tool",
     entry_points={
         'console_scripts': [
             'grafana-backup = grafana_backup.cli:main'

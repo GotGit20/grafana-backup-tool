@@ -10,6 +10,7 @@ from grafana_backup.archive import main as archive
 from grafana_backup.save_orgs import main as save_orgs
 from grafana_backup.save_users import main as save_users
 from grafana_backup.gcs_upload import main as gcs_upload
+from grafana_backup.loggingmod import logger
 import sys
 
 
@@ -31,7 +32,7 @@ def main(args, settings):
 
     # Do not continue if API is unavailable or token is not valid
     if not status == 200:
-        print("server status is not ok: {0}".format(json_resp))
+        logger.error("server status is not ok: {0}".format(json_resp))
         sys.exit(1)
 
 
@@ -52,5 +53,5 @@ def main(args, settings):
         archive(args, settings)
 
     if gcs_bucket_name:
-        print('Upload archives to GCS:')
+        logger.info('Upload archives to GCS:')
         gcs_upload(args, settings)
