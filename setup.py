@@ -8,7 +8,7 @@ requires = [
     'requests',
     'docopt',
     'google-cloud-storage',
-    'logging'
+    'logging',
     'ecs-logging'
 ]
 
