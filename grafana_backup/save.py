@@ -32,7 +32,7 @@ def main(args, settings):
 
     # Do not continue if API is unavailable or token is not valid
     if not status == 200:
-        logger.error("server status is not ok: {0}".format(json_resp))
+        logger.error("server status is not ok: {0}")
         sys.exit(1)
 
 

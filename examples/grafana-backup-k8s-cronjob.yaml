@@ -28,24 +28,29 @@ data:
   fluent.conf: |
       <source>
         @type tail
-        time_key time
+        @log_level debug
+        read_from_head true
         format json
         path /opt/grafana-backup-tool/logs/grafana-backup-tool.log
         pos_file /tmp/grafana-backup-tool.log.pos
         tag grafana-backup-tool
       </source>
 
-      <match grafana-backup-tool>
+      <match **>
         @type elasticsearch
+        @log_level debug
         host 34.72.203.226
         port 9200
         user elastic
-        password U3cl5s1oB4TpmbYs
+        scheme https
+        ssl_verify false
+        password "U3cl5s1oB4TpmbYs"
         index_name fluentd.${tag}
         logstash_format true
         logstash_prefix grafana-backup-tool
         flush_interval 1s
       </match>
+---
 # Run grafana-backup-tool daily and store backups in an S3
 # compatible object storage such as minio
 apiVersion: batch/v1
@@ -56,7 +61,7 @@ metadata:
   labels:
     app: grafana-backup-tool
 spec:
-  schedule: "* * * * *"
+  schedule: "*/2 * * * *"
   jobTemplate:
     metadata:
       labels:
@@ -77,28 +82,6 @@ spec:
                 mountPath: /etc/config
               - name: applog
                 mountPath: /opt/grafana-backup-tool/logs
-            - name: fluentd
-              args:
-              - |
-                while ! test -f /opt/grafana-backup-tool/logs/done; do
-                  echo "Waiting for the cronjob to finish..."
-                  sleep5
-                done
-                echo "Cronjob finsihed, exiting"
-                exit 0
-              
-              env:
-              - name: FLUENT_UID
-                value: root
-              - name: FLUENT_CONF
-                value: fluent.conf
-              - name: FLEUNTD_ARGS
-                value: -c /fluentd/etc/fluent.conf
-              image: saravak/fluentd:elastic
-              volumeMounts:
-              - name: applog
-                mountPath: /opt/grafana-backup-tool/logs
-
           volumes:
             - name: config-volume
               configMap:
