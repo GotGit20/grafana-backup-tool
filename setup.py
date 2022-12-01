@@ -9,7 +9,7 @@ requires = [
     'docopt',
     'google-cloud-storage',
     'ecs-logging',
-    'elasticapm'
+    'elastic-apm'
 ]
 
 setup(
