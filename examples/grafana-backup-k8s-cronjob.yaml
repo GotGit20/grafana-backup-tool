@@ -41,7 +41,7 @@ spec:
           containers:
             - name: grafana-backup-tool
               image: "mydock21/grafana-backup-tool:backup"
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               envFrom:
                 - configMapRef:
                     name: grafana-backup-tool

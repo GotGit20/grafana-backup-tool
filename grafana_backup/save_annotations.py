@@ -35,9 +35,9 @@ def get_all_annotations_and_save(folder_path, grafana_url, http_get_headers, ver
 
     ts_to = now
     ts_from = now - one_month_in_ms
-    thirteen_months_retention = (now - (13 * one_month_in_ms))
+    one_month_retention = (now - (1 * one_month_in_ms))
 
-    while ts_from > thirteen_months_retention:
+    while ts_from > one_month_retention:
         status_code_and_content = search_annotations(grafana_url, ts_from, ts_to, http_get_headers, verify_ssl, client_cert, debug)
         if status_code_and_content[0] == 200:
             annotations_batch = status_code_and_content[1]
