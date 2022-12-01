@@ -19,6 +19,33 @@ data:
   GCS_BUCKET_NAME: "varun-grafanabackup"
   GOOGLE_APPLICATION_CREDENTIALS: "/etc/config/google-storage-creds.json"
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentdconf
+  namespace: grafana-backup-tool
+data:
+  fluent.conf: |
+      <source>
+        @type tail
+        time_key time
+        format json
+        path /opt/grafana-backup-tool/logs/grafana-backup-tool.log
+        pos_file /tmp/grafana-backup-tool.log.pos
+        tag grafana-backup-tool
+      </source>
+
+      <match grafana-backup-tool>
+        @type elasticsearch
+        host 34.72.203.226
+        port 9200
+        user elastic
+        password U3cl5s1oB4TpmbYs
+        index_name fluentd.${tag}
+        logstash_format true
+        logstash_prefix grafana-backup-tool
+        flush_interval 1s
+      </match>
 # Run grafana-backup-tool daily and store backups in an S3
 # compatible object storage such as minio
 apiVersion: batch/v1
@@ -46,9 +73,38 @@ spec:
                 - configMapRef:
                     name: grafana-backup-tool
               volumeMounts:
-                - name: config-volume
-                  mountPath: /etc/config
+              - name: config-volume
+                mountPath: /etc/config
+              - name: applog
+                mountPath: /opt/grafana-backup-tool/logs
+            - name: fluentd
+              args:
+              - |
+                while ! test -f /opt/grafana-backup-tool/logs/done; do
+                  echo "Waiting for the cronjob to finish..."
+                  sleep5
+                done
+                echo "Cronjob finsihed, exiting"
+                exit 0
+              
+              env:
+              - name: FLUENT_UID
+                value: root
+              - name: FLUENT_CONF
+                value: fluent.conf
+              - name: FLEUNTD_ARGS
+                value: -c /fluentd/etc/fluent.conf
+              image: saravak/fluentd:elastic
+              volumeMounts:
+              - name: applog
+                mountPath: /opt/grafana-backup-tool/logs
+
           volumes:
             - name: config-volume
               configMap:
                 name: google-storage-creds
+            - name: applog
+              emptyDir: {}
+            - name: fdconf
+              configMap:
+                name: fluentdconf

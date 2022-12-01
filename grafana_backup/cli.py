@@ -48,7 +48,10 @@ def main():
 
     if args.get('save', None):
         save(args, settings)
-        time.sleep(300)
+        time.sleep(10)
+        f = open("/opt/grafana-backup-tool/logs/done", "a")
+        f.write("Cronjob done")
+        f.close()
         sys.exit()
     elif args.get('--help', None):
         print(docstring)
