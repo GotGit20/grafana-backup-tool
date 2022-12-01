@@ -51,7 +51,6 @@ def main():
 
     if args.get('save', None):
         time.sleep(60)
-        client.begin_transaction(transaction_type="custom_script")
         save(args, settings)
         time.sleep(10)
         f = open("/opt/grafana-backup-tool/logs/done", "a")
