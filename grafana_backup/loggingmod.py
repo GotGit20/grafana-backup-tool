@@ -1,5 +1,5 @@
 import logging
-import ecs-logging
+import ecs_logging
 import time
 
 logger = logging.getLogger("grafana-backup-tool")
