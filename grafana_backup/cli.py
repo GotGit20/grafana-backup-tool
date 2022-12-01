@@ -4,6 +4,7 @@ from grafana_backup.grafanaSettings import main as conf
 from docopt import docopt
 import os
 import sys
+import time
 
 docstring = """
 {0} {1}
@@ -47,6 +48,7 @@ def main():
 
     if args.get('save', None):
         save(args, settings)
+        time.sleep(300)
         sys.exit()
     elif args.get('--help', None):
         print(docstring)
