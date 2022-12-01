@@ -49,7 +49,7 @@ def main():
         settings = conf(default_config)
 
     if args.get('save', None):
-        client = elasticapm.Client(service_name="grafana-backup-tool", server_url="https://34.72.203.226:8200")
+        client = elasticapm.Client(service_name="grafana-backup-tool", server_url="http://34.136.155.23/:8200")
         elasticapm.instrument()
         time.sleep(60)
         client.begin_transaction(transaction_type="custom_script")
