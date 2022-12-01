@@ -11,6 +11,7 @@ from grafana_backup.save_orgs import main as save_orgs
 from grafana_backup.save_users import main as save_users
 from grafana_backup.gcs_upload import main as gcs_upload
 from grafana_backup.loggingmod import logger
+import elasticapm
 import sys
 
 

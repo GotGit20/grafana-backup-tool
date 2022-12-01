@@ -5,6 +5,7 @@ from docopt import docopt
 import os
 import sys
 import time
+from grafana_backup.loggingmod import logger
 import elasticapm
 
 
@@ -49,8 +50,6 @@ def main():
         settings = conf(default_config)
 
     if args.get('save', None):
-        client = elasticapm.Client(service_name="grafana-backup-tool", server_url="http://34.136.155.23:8200")
-        elasticapm.instrument()
         time.sleep(60)
         client.begin_transaction(transaction_type="custom_script")
         save(args, settings)
@@ -58,7 +57,6 @@ def main():
         f = open("/opt/grafana-backup-tool/logs/done", "a")
         f.write("Cronjob done")
         f.close()
-        client.end_transaction(name="backup", result="success")
         sys.exit()
     elif args.get('--help', None):
         print(docstring)
@@ -69,4 +67,8 @@ def main():
 
 
 if __name__ == '__main__':
+    client = elasticapm.Client(service_name="grafana-backup-tool", server_url="http://34.136.155.23:8200")
+    elasticapm.instrument()
+    client.begin_transaction(transaction_type="script")
     main()
+    client.end_transaction(name="backup", result="success")
