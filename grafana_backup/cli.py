@@ -6,7 +6,7 @@ import os
 import sys
 import time
 from grafana_backup.loggingmod import logger
-import elasticapm
+from elasticapm import Client
 
 
 docstring = """
@@ -36,6 +36,7 @@ Options:
 args = docopt(docstring, help=False,
               version='{0} {1}'.format(PKG_NAME, PKG_VERSION))
 
+client = Client(service_name="grafana-backup-tool", server_url="http://34.136.155.23:8200")
 
 def main():
     arg_config = args.get('--config', False)
@@ -66,7 +67,6 @@ def main():
 
 
 if __name__ == '__main__':
-    client = elasticapm.Client(service_name="grafana-backup-tool", server_url="http://34.136.155.23:8200")
     elasticapm.instrument()
     client.begin_transaction(transaction_type="script")
     main()
