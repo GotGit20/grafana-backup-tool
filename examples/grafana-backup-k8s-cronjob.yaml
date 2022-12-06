@@ -25,10 +25,9 @@ metadata:
   name: fluentdconf
   namespace: grafana-backup-tool
 data:
-  fluent.conf: |
+  fluentd.conf: |
       <source>
         @type tail
-        @log_level debug
         read_from_head true
         format json
         path /opt/grafana-backup-tool/logs/grafana-backup-tool.log
@@ -38,11 +37,11 @@ data:
 
       <match **>
         @type elasticsearch
-        @log_level debug
         host 34.72.203.226
         port 9200
         user elastic
         scheme https
+        ssl_version TLSv1_2
         ssl_verify false
         password "U3cl5s1oB4TpmbYs"
         index_name fluentd.${tag}
@@ -71,6 +70,27 @@ spec:
         spec:
           restartPolicy: "Never"
           containers:
+            - name: fluentd
+              env:
+              - name: FLUENTD_ARGS
+                value: -c /etc/fluentd-config/fluentd.conf
+              image: mydock21/fluentd-elasticsearch:5.2.4
+              imagePullPolicy: Always
+              command: ["/bin/sh", "-c"]
+              args:
+              - |
+                fluentd $FLUENTD_ARGS &
+                while ! test -f /opt/grafana-backup-tool/logs/done; do
+                  echo 'Waiting'
+                  sleep 5
+                done
+                echo "cronjob finsihed, exiting"
+                exit 0
+              volumeMounts: 
+              - name: applog
+                mountPath: /opt/grafana-backup-tool/logs
+              - name: fdconf
+                mountPath: /etc/fluentd-config
             - name: grafana-backup-tool
               image: "mydock21/grafana-backup-tool:backup"
               imagePullPolicy: Always
