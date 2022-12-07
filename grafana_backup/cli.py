@@ -36,7 +36,7 @@ Options:
 args = docopt(docstring, help=False,
               version='{0} {1}'.format(PKG_NAME, PKG_VERSION))
 
-client = Client(service_name="grafana-backup-tool", server_url="http://35.192.133.101:8200")
+client = Client(service_name="grafana-backup-tool", server_url="http://34.71.4.143:8200")
 
 def main():
     arg_config = args.get('--config', False)
